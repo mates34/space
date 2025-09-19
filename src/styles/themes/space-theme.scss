@@ -1,0 +1,30 @@
+// Space Theme Variables
+:root {
+  /* Primary Colors */
+  --rocket-blue: #00d4ff;
+  --space-purple: #8b5cf6;
+  --planet-cyan: #22d3ee;
+  --engine-orange: #f97316;
+  --star-white: #ffffff;
+  --cosmic-pink: #ec4899;
+  --nebula-violet: #7c3aed;
+  
+  /* Background Colors */
+  --deep-space: #020617;
+  --space-dark: #0f172a;
+  --space-medium: #1e293b;
+  --space-light: #334155;
+  --space-lighter: #475569;
+  
+  /* Typography */
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
+  
+  /* Spacing */
+  --container-max-width: 1200px;
+  --container-padding: 0 2rem;
+  
+  /* Z-Index Layers */
+  --z-content: 20;
+  --z-header: 30;
+}
