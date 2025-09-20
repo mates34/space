@@ -3,47 +3,71 @@ import "./Navbar.scss";
 
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
+
+      // Update active section based on scroll position
+      const sections = ["home", "about"];
+      const currentSection = sections.find((section) => {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          return rect.top <= 100 && rect.bottom >= 100;
+        }
+        return false;
+      });
+
+      if (currentSection) {
+        setActiveSection(currentSection);
+      }
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  };
+
   return (
     <nav className={`navbar ${isScrolled ? "navbar--scrolled" : ""}`}>
       <div className="navbar__container">
         <a href="/" className="navbar__brand">
           <div className="navbar__logo">
-            <div className="space-ai-icon">
-              <div className="planet-ring"></div>
-              <div className="ai-core"></div>
-              <div className="orbit-1"></div>
-              <div className="orbit-2"></div>
-            </div>
+            <img src="/logo.png" alt="Space AI Logo" className="logo-image" />
           </div>
           <span className="navbar__title">Space AI</span>
         </a>
 
         <div className="navbar__menu">
-          <a href="#home" className="navbar__link active">
+          <button
+            onClick={() => scrollToSection("home")}
+            className={`navbar__link ${
+              activeSection === "home" ? "active" : ""
+            }`}
+          >
             Home
-          </a>
-          <a href="#about" className="navbar__link">
+          </button>
+          <button
+            onClick={() => scrollToSection("about")}
+            className={`navbar__link ${
+              activeSection === "about" ? "active" : ""
+            }`}
+          >
             About
-          </a>
-          <a href="#tokenomics" className="navbar__link">
-            Tokenomics
-          </a>
-          <a href="#roadmap" className="navbar__link">
-            Roadmap
-          </a>
-          <a href="#community" className="navbar__link">
-            Community
-          </a>
+          </button>
+          <button className="navbar__link">Features</button>
+          <button className="navbar__link">Contact</button>
         </div>
 
         <div className="navbar__actions">

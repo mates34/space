@@ -21,10 +21,14 @@ const Hero = () => {
       {/* Dark to Light Effect */}
       <div className="hero__darkness-fade"></div>
 
+      {/* Background Stars - Küçük yıldızlar */}
+      <div className="hero__background-stars"></div>
+
       {/* Star Layers */}
       <div className="hero__stars-layer-1"></div>
       <div className="hero__stars-layer-2"></div>
       <div className="hero__stars-layer-3"></div>
+      <div className="hero__real-stars-overlay"></div>
       <div className="hero__twinkling"></div>
     </section>
   );

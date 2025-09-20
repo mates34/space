@@ -1,0 +1,91 @@
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="aiGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%" style="stop-color:#00D4FF;stop-opacity:1" />
+    <stop offset="50%" style="stop-color:#0099CC;stop-opacity:1" />
+    <stop offset="100%" style="stop-color:#74C0FC;stop-opacity:1" />
+  </linearGradient>
+  <filter id="glow">
+    <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+    <feMerge> 
+      <feMergeNode in="coloredBlur"/>
+      <feMergeNode in="SourceGraphic"/>
+    </feMerge>
+  </filter>
+</defs>
+
+<g id="space-ai-logo">
+  <!-- Main A letter -->
+  <path d="M120 350 L160 200 L240 200 L280 350" 
+        stroke="url(#aiGradient)" 
+        stroke-width="20" 
+        fill="none" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"
+        filter="url(#glow)">
+    <animate attributeName="stroke-width" 
+             values="20;25;20" 
+             dur="3s" 
+             repeatCount="indefinite"/>
+  </path>
+  
+  <path d="M140 290 L260 290" 
+        stroke="url(#aiGradient)" 
+        stroke-width="20" 
+        stroke-linecap="round"
+        filter="url(#glow)">
+    <animate attributeName="stroke-width" 
+             values="20;25;20" 
+             dur="3s" 
+             repeatCount="indefinite"/>
+  </path>
+
+  <!-- Second A letter -->
+  <path d="M180 350 L200 280 L240 280 L260 350" 
+        stroke="url(#aiGradient)" 
+        stroke-width="12" 
+        fill="none" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"
+        opacity="0.8"
+        filter="url(#glow)">
+    <animate attributeName="opacity" 
+             values="0.8;1;0.8" 
+             dur="4s" 
+             repeatCount="indefinite"/>
+  </path>
+  
+  <path d="M190 320 L250 320" 
+        stroke="url(#aiGradient)" 
+        stroke-width="12" 
+        stroke-linecap="round"
+        opacity="0.8"
+        filter="url(#glow)">
+    <animate attributeName="opacity" 
+             values="0.8;1;0.8" 
+             dur="4s" 
+             repeatCount="indefinite"/>
+  </path>
+
+  <!-- Orbital ring -->
+  <ellipse cx="200" cy="200" 
+           rx="150" ry="80" 
+           stroke="url(#aiGradient)" 
+           stroke-width="8" 
+           fill="none" 
+           opacity="0.6" 
+           transform="rotate(-30 200 200)"
+           filter="url(#glow)">
+    <animateTransform attributeName="transform" 
+                      attributeType="XML"
+                      type="rotate" 
+                      values="-30 200 200;330 200 200;-30 200 200" 
+                      dur="15s" 
+                      repeatCount="indefinite"/>
+    <animate attributeName="opacity" 
+             values="0.6;0.9;0.6" 
+             dur="5s" 
+             repeatCount="indefinite"/>
+  </ellipse>
+</g>
+</svg>

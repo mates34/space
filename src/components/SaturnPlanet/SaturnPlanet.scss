@@ -3,19 +3,149 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 8; // Content'in arkasında ama star'ların üzerinde
+  z-index: 15; 
+  pointer-events: auto;
+  
+  // Atmosphere effect around planet
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 650px;
+    height: 650px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at center,
+      transparent 42%,
+      rgba(74, 144, 226, 0.15) 46%,
+      rgba(74, 144, 226, 0.08) 52%,
+      rgba(135, 206, 255, 0.04) 58%,
+      transparent 65%
+    );
+    animation: atmosphere-pulse 8s ease-in-out infinite;
+    z-index: -1;
+    box-shadow: 
+      0 0 40px rgba(74, 144, 226, 0.2),
+      0 0 80px rgba(74, 144, 226, 0.1);
+  }
+  
+  // Second atmosphere layer
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 720px;
+    height: 720px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at center,
+      transparent 48%,
+      rgba(100, 150, 255, 0.12) 52%,
+      rgba(150, 200, 255, 0.06) 58%,
+      rgba(200, 230, 255, 0.03) 64%,
+      transparent 72%
+    );
+    animation: atmosphere-pulse 12s ease-in-out infinite reverse;
+    z-index: -2;
+    box-shadow: 
+      0 0 60px rgba(100, 150, 255, 0.15),
+      0 0 120px rgba(150, 200, 255, 0.08);
+  }
   
   &__container {
-    width: 600px; // Daha da büyük
+    width: 600px;
     height: 600px;
     position: relative;
-    opacity: 0.7; // Daha net görünüm
+    opacity: 0.8;
+    cursor: pointer;
+    transition: all 3s ease;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 
+      0 0 80px rgba(74, 144, 226, 0.2),
+      0 0 160px rgba(74, 144, 226, 0.12),
+      0 0 240px rgba(74, 144, 226, 0.06),
+      inset 0 0 60px rgba(0, 0, 0, 0.15),
+      inset 20px 20px 40px rgba(0, 0, 0, 0.08);
+    
+    // Container hover effect
+    &:hover {
+      opacity: 0.95;
+      transform: scale(1.05);
+      box-shadow: 
+        0 0 120px rgba(74, 144, 226, 0.3),
+        0 0 200px rgba(74, 144, 226, 0.2),
+        0 0 300px rgba(74, 144, 226, 0.1),
+        inset 0 0 50px rgba(0, 0, 0, 0.08),
+        inset 15px 15px 30px rgba(0, 0, 0, 0.05);
+      
+      .saturn-planet__image {
+        filter: 
+          drop-shadow(0 0 60px rgba(74, 144, 226, 0.5))
+          drop-shadow(0 0 120px rgba(74, 144, 226, 0.4))
+          drop-shadow(0 0 180px rgba(74, 144, 226, 0.25));
+      }
+    }
   }
   
   &__image {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+    width: 130%;
+    height: 130%;
+    position: absolute;
+    top: -15%;
+    left: -15%;
+    object-fit: cover; 
+    object-position: center center;
+    animation: 
+      planet-rotate 600s linear infinite,
+      planet-glow 4s ease-in-out infinite alternate;
+    filter: 
+      drop-shadow(0 0 40px rgba(74, 144, 226, 0.3))
+      drop-shadow(0 0 80px rgba(74, 144, 226, 0.1));
+    transition: all 3s ease;
+  }
+}
+
+// Planet animations
+@keyframes planet-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes planet-glow {
+  0% {
+    filter: 
+      drop-shadow(0 0 40px rgba(74, 144, 226, 0.3))
+      drop-shadow(0 0 80px rgba(74, 144, 226, 0.1));
+  }
+  100% {
+    filter: 
+      drop-shadow(0 0 60px rgba(74, 144, 226, 0.5))
+      drop-shadow(0 0 120px rgba(74, 144, 226, 0.2));
+  }
+}
+
+// Atmosphere effect animation
+@keyframes atmosphere-pulse {
+  0% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+  100% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1);
   }
 }
 
@@ -25,32 +155,44 @@
     right: -100px;
     
     &__container {
-      width: 450px; // Büyük tutuyoruz
-      height: 450px;
+      width: 550px;
+      height: 550px;
     }
   }
 }
 
 @media (max-width: 768px) {
   .saturn-planet {
-    right: -80px;
+    right: -100px;
     top: 60%;
     
     &__container {
-      width: 200px;
-      height: 200px;
+      width: 350px;
+      height: 350px;
+    }
+    
+    &__image {
+      &:hover {
+        transform: scale(1.05);
+      }
     }
   }
 }
 
 @media (max-width: 480px) {
   .saturn-planet {
-    right: -60px;
+    right: -80px;
     top: 65%;
     
     &__container {
-      width: 150px;
-      height: 150px;
+      width: 250px;
+      height: 250px;
+    }
+    
+    &__image {
+      &:hover {
+        transform: scale(1.03);
+      }
     }
   }
 }
