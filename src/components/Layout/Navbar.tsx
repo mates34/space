@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react";
+import MoonMapModal from "../MoonMapModal/MoonMapModal";
 import "./Navbar.scss";
 
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const [isMoonMapOpen, setIsMoonMapOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
 
       // Update active section based on scroll position
-      const sections = ["home", "about"];
+      const sections = ["home", "about", "features"];
       const currentSection = sections.find((section) => {
         const element = document.getElementById(section);
         if (element) {
@@ -28,6 +30,20 @@ const Navbar: React.FC = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Modal açıkken body scroll'unu engelle
+  useEffect(() => {
+    if (isMoonMapOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+
+    // Component unmount olurken temizle
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isMoonMapOpen]);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -66,16 +82,33 @@ const Navbar: React.FC = () => {
           >
             About
           </button>
-          <button className="navbar__link">Features</button>
-          <button className="navbar__link">Contact</button>
+          <button
+            onClick={() => scrollToSection("features")}
+            className={`navbar__link ${
+              activeSection === "features" ? "active" : ""
+            }`}
+          >
+            Features
+          </button>
+          <button
+            onClick={() => scrollToSection("chains")}
+            className={`navbar__link ${
+              activeSection === "chains" ? "active" : ""
+            }`}
+          >
+            Chains
+          </button>
         </div>
 
         <div className="navbar__actions">
-          <a href="#" className="btn btn--secondary">
-            Whitepaper
-          </a>
+          <button
+            onClick={() => setIsMoonMapOpen(true)}
+            className="btn btn--secondary"
+          >
+            📜 Moon Map
+          </button>
           <a href="#" className="btn btn--primary">
-            Launch App
+            🚀 Join Mission
           </a>
         </div>
 
@@ -85,6 +118,11 @@ const Navbar: React.FC = () => {
           <span></span>
         </button>
       </div>
+
+      <MoonMapModal
+        isOpen={isMoonMapOpen}
+        onClose={() => setIsMoonMapOpen(false)}
+      />
     </nav>
   );
 };

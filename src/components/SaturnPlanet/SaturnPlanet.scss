@@ -29,6 +29,23 @@
     box-shadow: 
       0 0 40px rgba(74, 144, 226, 0.2),
       0 0 80px rgba(74, 144, 226, 0.1);
+    transition: all 3s ease;
+  }
+
+  // Atmosphere hover effect
+  &:hover::before {
+    transform: translate(-50%, -50%) scale(1.1);
+    background: radial-gradient(
+      circle at center,
+      transparent 40%,
+      rgba(74, 144, 226, 0.25) 44%,
+      rgba(74, 144, 226, 0.15) 50%,
+      rgba(135, 206, 255, 0.08) 56%,
+      transparent 65%
+    );
+    box-shadow: 
+      0 0 60px rgba(74, 144, 226, 0.4),
+      0 0 120px rgba(74, 144, 226, 0.2);
   }
   
   // Second atmosphere layer
@@ -54,6 +71,23 @@
     box-shadow: 
       0 0 60px rgba(100, 150, 255, 0.15),
       0 0 120px rgba(150, 200, 255, 0.08);
+    transition: all 3s ease;
+  }
+
+  // Second atmosphere hover effect
+  &:hover::after {
+    transform: translate(-50%, -50%) scale(1.1);
+    background: radial-gradient(
+      circle at center,
+      transparent 46%,
+      rgba(100, 150, 255, 0.20) 50%,
+      rgba(150, 200, 255, 0.12) 56%,
+      rgba(200, 230, 255, 0.06) 62%,
+      transparent 72%
+    );
+    box-shadow: 
+      0 0 90px rgba(100, 150, 255, 0.25),
+      0 0 180px rgba(150, 200, 255, 0.15);
   }
   
   &__container {
@@ -74,20 +108,20 @@
     
     // Container hover effect
     &:hover {
-      opacity: 0.95;
-      transform: scale(1.05);
+      opacity: 1;
+      transform: scale(1.1);
       box-shadow: 
-        0 0 120px rgba(74, 144, 226, 0.3),
-        0 0 200px rgba(74, 144, 226, 0.2),
-        0 0 300px rgba(74, 144, 226, 0.1),
-        inset 0 0 50px rgba(0, 0, 0, 0.08),
-        inset 15px 15px 30px rgba(0, 0, 0, 0.05);
+        0 0 150px rgba(74, 144, 226, 0.4),
+        0 0 250px rgba(74, 144, 226, 0.3),
+        0 0 350px rgba(74, 144, 226, 0.2),
+        inset 0 0 80px rgba(74, 144, 226, 0.1),
+        inset 20px 20px 60px rgba(74, 144, 226, 0.05);
       
       .saturn-planet__image {
         filter: 
-          drop-shadow(0 0 60px rgba(74, 144, 226, 0.5))
-          drop-shadow(0 0 120px rgba(74, 144, 226, 0.4))
-          drop-shadow(0 0 180px rgba(74, 144, 226, 0.25));
+          drop-shadow(0 0 80px rgba(74, 144, 226, 0.6))
+          drop-shadow(0 0 150px rgba(74, 144, 226, 0.5))
+          drop-shadow(0 0 220px rgba(74, 144, 226, 0.3));
       }
     }
   }

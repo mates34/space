@@ -1,0 +1,341 @@
+.moon-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  animation: fadeIn 0.3s ease-out;
+  overflow: hidden; /* Modal dışında scroll engelle */
+}
+
+.moon-modal {
+  background: linear-gradient(135deg, 
+    rgba(0, 0, 20, 0.95) 0%, 
+    rgba(20, 20, 60, 0.95) 50%, 
+    rgba(0, 0, 20, 0.95) 100%);
+  border-radius: 25px;
+  border: 2px solid rgba(116, 192, 252, 0.3);
+  max-width: 900px;
+  max-height: 90vh;
+  width: 100%;
+  overflow-y: auto;
+  position: relative;
+  animation: slideUp 0.3s ease-out;
+  box-shadow: 
+    0 20px 60px rgba(116, 192, 252, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+  &__close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+  }
+
+  &__header {
+    padding: 2rem 2rem 1rem 2rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(116, 192, 252, 0.2);
+
+    h2 {
+      font-size: 2.5rem;
+      color: #fff;
+      margin: 0 0 0.5rem 0;
+      background: linear-gradient(135deg, #ffffff 0%, #a0c4ff 50%, #74c0fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    p {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1.1rem;
+      margin: 0;
+    }
+  }
+
+  &__content {
+    padding: 2rem;
+  }
+}
+
+.moon-map {
+  margin-bottom: 3rem;
+
+  .moon-surface {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 0 auto 2rem auto;
+    border-radius: 50%;
+    background: 
+      radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 70% 20%, rgba(200, 200, 200, 0.1) 0%, transparent 30%),
+      radial-gradient(circle at 20% 80%, rgba(150, 150, 150, 0.1) 0%, transparent 40%),
+      #333;
+    box-shadow: 
+      0 0 40px rgba(116, 192, 252, 0.3),
+      inset 0 0 60px rgba(0, 0, 0, 0.5);
+
+    .moon-emoji {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 8rem;
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    .location-marker {
+      position: absolute;
+      cursor: pointer;
+      animation: pulse 2s ease-in-out infinite;
+
+      .marker {
+        font-size: 1.5rem;
+        filter: drop-shadow(0 0 10px rgba(116, 192, 252, 0.8));
+      }
+
+      .location-info {
+        position: absolute;
+        top: -60px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.9);
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        border: 1px solid rgba(116, 192, 252, 0.5);
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+
+        h4 {
+          color: #74c0fc;
+          font-size: 0.9rem;
+          margin: 0 0 0.2rem 0;
+        }
+
+        p {
+          color: rgba(255, 255, 255, 0.8);
+          font-size: 0.8rem;
+          margin: 0;
+        }
+      }
+
+      &:hover .location-info {
+        opacity: 1;
+      }
+
+      &.location-1 { top: 20%; left: 30%; }
+      &.location-2 { top: 60%; left: 70%; }
+      &.location-3 { top: 15%; right: 25%; }
+      &.location-4 { bottom: 30%; left: 20%; }
+      &.location-5 { top: 45%; right: 15%; }
+    }
+  }
+}
+
+.moon-phases {
+  margin-bottom: 3rem;
+
+  h3 {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.5rem;
+  }
+
+  .phases-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .phase-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 1rem;
+    text-align: center;
+    border: 1px solid rgba(116, 192, 252, 0.2);
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      border-color: rgba(116, 192, 252, 0.5);
+      box-shadow: 0 10px 30px rgba(116, 192, 252, 0.2);
+    }
+
+    .phase-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    h4 {
+      color: #74c0fc;
+      margin: 0 0 0.5rem 0;
+      font-size: 0.9rem;
+    }
+
+    p {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.8rem;
+      margin: 0;
+      line-height: 1.4;
+    }
+  }
+}
+
+.moon-facts {
+  margin-bottom: 2rem;
+
+  h3 {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.5rem;
+  }
+
+  .facts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .fact-card {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 1.5rem;
+    text-align: center;
+    border: 1px solid rgba(116, 192, 252, 0.3);
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: scale(1.05);
+      border-color: rgba(116, 192, 252, 0.6);
+      box-shadow: 0 15px 40px rgba(116, 192, 252, 0.3);
+    }
+
+    .fact-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      filter: drop-shadow(0 0 15px rgba(116, 192, 252, 0.5));
+    }
+
+    h4 {
+      color: #fff;
+      margin: 0 0 0.5rem 0;
+      font-size: 1rem;
+    }
+
+    p {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.9rem;
+      margin: 0;
+      line-height: 1.4;
+    }
+  }
+}
+
+.moon-disclaimer {
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-radius: 15px;
+  padding: 1.5rem;
+  text-align: center;
+
+  p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0;
+
+    strong {
+      color: #ffc107;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(50px) scale(0.95); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { 
+    transform: scale(1); 
+  }
+  50% { 
+    transform: scale(1.1); 
+  }
+}
+
+@media (max-width: 768px) {
+  .moon-modal {
+    margin: 1rem;
+    max-height: 95vh;
+
+    &__header {
+      padding: 1.5rem 1.5rem 1rem 1.5rem;
+
+      h2 {
+        font-size: 2rem;
+      }
+    }
+
+    &__content {
+      padding: 1.5rem;
+    }
+  }
+
+  .moon-map .moon-surface {
+    width: 250px;
+    height: 250px;
+
+    .moon-emoji {
+      font-size: 6rem;
+    }
+  }
+
+  .moon-phases .phases-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+
+  .moon-facts .facts-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+}

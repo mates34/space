@@ -7,59 +7,78 @@ const About: React.FC = () => {
       <div className="about__container">
         <div className="about__content">
           <div className="about__header">
-            <div className="about__badge">🚀 Next Generation Technology</div>
-            <h2 className="about__title">Pioneering Space AI Revolution</h2>
+            <div className="about__badge">🚀 HODL TO THE MOON 🌙</div>
+            <h2 className="about__title">Join the Space Ape Army!</h2>
             <p className="about__subtitle">
-              Where artificial intelligence meets the infinite possibilities of
-              space exploration, creating solutions that were once only dreams
-              in science fiction.
+              We're not just going to space, we're taking the entire crypto
+              community with us! Diamond hands only, paper hands stay on Earth!
+              💎🙌
             </p>
+          </div>
+
+          {/* Memecoin Stats */}
+          <div className="about__meme-stats">
+            <div className="about__stat">
+              <span className="about__stat-emoji">🚀</span>
+              <span className="about__stat-value">420,690</span>
+              <span className="about__stat-label">Space Apes</span>
+            </div>
+            <div className="about__stat">
+              <span className="about__stat-emoji">💎</span>
+              <span className="about__stat-value">69%</span>
+              <span className="about__stat-label">Diamond Hands</span>
+            </div>
+            <div className="about__stat">
+              <span className="about__stat-emoji">🌙</span>
+              <span className="about__stat-value">∞</span>
+              <span className="about__stat-label">Moon Distance</span>
+            </div>
           </div>
 
           {/* Main Features Grid */}
           <div className="about__features">
             <div className="about__feature about__feature--ai">
-              <div className="about__feature-icon">🧠</div>
-              <h3 className="about__feature-title">Advanced AI Systems</h3>
+              <div className="about__feature-icon">�</div>
+              <h3 className="about__feature-title">Ape Intelligence</h3>
               <p className="about__feature-description">
-                Our neural networks process vast amounts of cosmic data,
-                enabling real-time decision making for autonomous space missions
-                and deep space exploration.
+                Our AI is powered by the collective brain power of 420,000 space
+                apes! No paper hands allowed in our neural networks. Only
+                diamond brain computations! 🧠💎
               </p>
               <div className="about__feature-tech">
-                <span>Machine Learning</span>
-                <span>Neural Networks</span>
-                <span>Deep Learning</span>
+                <span>Diamond Hands AI</span>
+                <span>Ape Neural Networks</span>
+                <span>HODL Algorithms</span>
               </div>
             </div>
 
             <div className="about__feature about__feature--space">
-              <div className="about__feature-icon">🌌</div>
-              <h3 className="about__feature-title">Space Technology</h3>
+              <div className="about__feature-icon">🚀</div>
+              <h3 className="about__feature-title">Moon Rocket Tech</h3>
               <p className="about__feature-description">
-                Cutting-edge propulsion systems, quantum communication networks,
-                and AI-driven spacecraft that adapt and evolve during their
-                missions.
+                Our rockets are fueled by pure diamond hands energy and meme
+                magic! Destination: Moon, Mars, and beyond! We don't stop till
+                we're millionaires! 🌙💰
               </p>
               <div className="about__feature-tech">
-                <span>Quantum Computing</span>
-                <span>Ion Propulsion</span>
-                <span>Satellite Networks</span>
+                <span>Meme Propulsion</span>
+                <span>HODL Fuel Systems</span>
+                <span>Diamond Thrusters</span>
               </div>
             </div>
 
             <div className="about__feature about__feature--exploration">
-              <div className="about__feature-icon">🔭</div>
-              <h3 className="about__feature-title">Deep Space Exploration</h3>
+              <div className="about__feature-icon">�</div>
+              <h3 className="about__feature-title">Diamond Hand Rewards</h3>
               <p className="about__feature-description">
-                Autonomous probes equipped with AI that can make independent
-                decisions, discover new phenomena, and transmit findings across
-                vast distances.
+                The longer you HODL, the more space tokens you earn! Our staking
+                system rewards true believers with moon tickets and asteroid
+                mining rights! 💰🌟
               </p>
               <div className="about__feature-tech">
-                <span>Autonomous Navigation</span>
-                <span>Data Analysis</span>
-                <span>Signal Processing</span>
+                <span>HODL Rewards</span>
+                <span>Moon Staking</span>
+                <span>Ape Dividends</span>
               </div>
             </div>
           </div>
@@ -67,8 +86,8 @@ const About: React.FC = () => {
           {/* Mission Cards */}
           <div className="about__missions">
             <div className="about__missions-header">
-              <h3>Active Missions</h3>
-              <p>Currently deployed AI systems across the solar system</p>
+              <h3>🚀 Moon Missions in Progress</h3>
+              <p>Our diamond-handed apes are conquering the galaxy!</p>
             </div>
             <div className="about__missions-grid">
               <div className="about__mission about__mission--mars">
