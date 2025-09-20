@@ -1,0 +1,56 @@
+.saturn-planet {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 8; // Content'in arkasında ama star'ların üzerinde
+  
+  &__container {
+    width: 600px; // Daha da büyük
+    height: 600px;
+    position: relative;
+    opacity: 0.7; // Daha net görünüm
+  }
+  
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+// Responsive design
+@media (max-width: 1200px) {
+  .saturn-planet {
+    right: -100px;
+    
+    &__container {
+      width: 450px; // Büyük tutuyoruz
+      height: 450px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .saturn-planet {
+    right: -80px;
+    top: 60%;
+    
+    &__container {
+      width: 200px;
+      height: 200px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .saturn-planet {
+    right: -60px;
+    top: 65%;
+    
+    &__container {
+      width: 150px;
+      height: 150px;
+    }
+  }
+}

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { RiRocketLine } from "react-icons/ri";
 import "./Navbar.scss";
 
 const Navbar: React.FC = () => {
@@ -18,8 +17,15 @@ const Navbar: React.FC = () => {
     <nav className={`navbar ${isScrolled ? "navbar--scrolled" : ""}`}>
       <div className="navbar__container">
         <a href="/" className="navbar__brand">
-          <RiRocketLine className="navbar__logo" />
-          <span className="navbar__title">SpaceToken</span>
+          <div className="navbar__logo">
+            <div className="space-ai-icon">
+              <div className="planet-ring"></div>
+              <div className="ai-core"></div>
+              <div className="orbit-1"></div>
+              <div className="orbit-2"></div>
+            </div>
+          </div>
+          <span className="navbar__title">Space AI</span>
         </a>
 
         <div className="navbar__menu">

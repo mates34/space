@@ -4,11 +4,62 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: #000 !important;
+  background: url('/stars-galaxy-3840x2160-10307.jpg') center center / cover no-repeat, #000;
   z-index: 1;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  // Distant stars - smallest and most numerous
+  // Hero content
+  &__content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 10;
+    color: white;
+    
+    .hero__title {
+      font-size: 4rem;
+      font-weight: 700;
+      margin: 0;
+      background: linear-gradient(135deg, #ffffff 0%, #a0c4ff 50%, #74c0fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 30px rgba(116, 192, 252, 0.5);
+      margin-bottom: 1rem;
+      animation: title-pulse 4s ease-in-out infinite;
+    }
+    
+    .hero__subtitle {
+      font-size: 1.4rem;
+      color: rgba(255, 255, 255, 0.9);
+      margin: 0;
+      margin-bottom: 1rem;
+    }
+    
+    .hero__description {
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin: 0;
+      max-width: 600px;
+      line-height: 1.6;
+    }
+  }
+
+  // Dark to light fade effect
+  &__darkness-fade {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.8) 60%, rgba(0,0,0,0.95) 100%);
+    animation: fade-to-light 3s ease-out forwards;
+    z-index: 2;
+  }
+
+  // Dark to light fade effect
   &__stars-layer-1 {
     position: absolute;
     inset: 0;
@@ -25,7 +76,8 @@
       radial-gradient(1px 1px at 15% 87%, rgba(255,255,255,0.7) 0%, transparent 2px),
       radial-gradient(1px 1px at 73% 56%, rgba(255,255,255,0.8) 0%, transparent 2px),
       radial-gradient(1px 1px at 38% 12%, rgba(255,255,255,0.9) 0%, transparent 2px);
-    animation: stars-twinkle-slow 6s ease-in-out infinite;
+    animation: stars-twinkle-slow 8s ease-in-out infinite;
+    z-index: 3;
   }
 
   // Medium stars - slightly bigger and fewer
@@ -41,7 +93,8 @@
       radial-gradient(1.5px 1.5px at 16% 38%, rgba(255,255,255,0.95) 0%, transparent 3px),
       radial-gradient(1.5px 1.5px at 67% 74%, rgba(255,255,255,0.85) 0%, transparent 3px),
       radial-gradient(1.5px 1.5px at 94% 28%, rgba(255,255,255,0.9) 0%, transparent 3px);
-    animation: stars-twinkle-medium 4.5s ease-in-out infinite 0.8s;
+    animation: stars-twinkle-medium 6s ease-in-out infinite 0.8s;
+    z-index: 4;
   }
 
   // Bright stars - biggest and most prominent
@@ -55,7 +108,8 @@
       radial-gradient(2px 2px at 88% 15%, rgba(255,255,255,1) 0%, transparent 4px),
       radial-gradient(2px 2px at 14% 52%, rgba(200,180,255,0.9) 0%, transparent 4px),
       radial-gradient(2px 2px at 69% 43%, rgba(255,240,200,0.95) 0%, transparent 4px);
-    animation: stars-twinkle-bright 3s ease-in-out infinite 1.2s;
+    animation: stars-twinkle-bright 5s ease-in-out infinite 1.2s;
+    z-index: 5;
   }
 
   // Subtle twinkling overlay
@@ -71,10 +125,34 @@
       radial-gradient(0.5px 0.5px at 94% 42%, rgba(255,255,255,0.3) 0%, transparent 2px),
       radial-gradient(0.5px 0.5px at 58% 19%, rgba(255,255,255,0.4) 0%, transparent 2px),
       radial-gradient(0.5px 0.5px at 12% 94%, rgba(255,255,255,0.5) 0%, transparent 2px);
-    animation: shimmer 2.8s ease-in-out infinite 2s;
+    animation: shimmer 4s ease-in-out infinite 2s;
+    z-index: 6;
   }
 }
 
+// Dark to light fade animation
+@keyframes fade-to-light {
+  0% {
+    background: radial-gradient(circle at center, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.8) 60%, rgba(0,0,0,0.95) 100%);
+  }
+  100% {
+    background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.4) 100%);
+  }
+}
+
+// Title pulsing animation
+@keyframes title-pulse {
+  0%, 100% { 
+    transform: scale(1);
+    text-shadow: 0 0 30px rgba(116, 192, 252, 0.5);
+  }
+  50% { 
+    transform: scale(1.05);
+    text-shadow: 0 0 40px rgba(116, 192, 252, 0.8), 0 0 60px rgba(116, 192, 252, 0.3);
+  }
+}
+
+// Star twinkling animations
 @keyframes stars-twinkle-slow {
   0%, 100% { opacity: 0.8; transform: scale(1); }
   50% { opacity: 1; transform: scale(1.1); }
@@ -94,4 +172,33 @@
   0%, 100% { opacity: 0.2; }
   33% { opacity: 0.6; }
   66% { opacity: 0.4; }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .hero {
+    &__content {
+      .hero__title {
+        font-size: 2.5rem;
+      }
+      
+      .hero__subtitle {
+        font-size: 1.1rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    &__content {
+      .hero__title {
+        font-size: 2rem;
+      }
+      
+      .hero__subtitle {
+        font-size: 1rem;
+      }
+    }
+  }
 }
