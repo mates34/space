@@ -20,13 +20,6 @@ interface Bullet {
   y: number;
 }
 
-interface PowerUp {
-  id: number;
-  x: number;
-  y: number;
-  type: 'doubleShot' | 'rapidFire';
-}
-
 const Game: React.FC = () => {
   const [gameStarted, setGameStarted] = useState(false);
   const [gameOver, setGameOver] = useState(false);
@@ -36,36 +29,27 @@ const Game: React.FC = () => {
   const [playerPos, setPlayerPos] = useState<Position>({ x: 400, y: 500 });
   const [meteors, setMeteors] = useState<Meteor[]>([]);
   const [bullets, setBullets] = useState<Bullet[]>([]);
-  const [powerUps, setPowerUps] = useState<PowerUp[]>([]);
   const [difficulty, setDifficulty] = useState(1);
-  const [weaponLevel, setWeaponLevel] = useState(1);
-  const [doubleShot, setDoubleShot] = useState(false);
-  const [rapidFire, setRapidFire] = useState(false);
 
   const gameAreaRef = useRef<HTMLDivElement>(null);
   const animationFrameRef = useRef<number>(0);
   const lastBulletTime = useRef<number>(0);
   const lastMeteorTime = useRef<number>(0);
-  const lastPowerUpTime = useRef<number>(0);
 
   const GAME_WIDTH = 800;
   const GAME_HEIGHT = 600;
   const PLAYER_SIZE = 40;
   const BULLET_SPEED = 8;
 
-  // Dynamic difficulty system with weapon upgrades
+  // Dynamic difficulty system
   const getDifficulty = () => {
     const level = Math.floor(score / 100) + 1; // Every 100 points = +1 level
-    const weaponUpgrade = Math.floor(level / 2) + 1; // Weapon upgrades every 2 levels
-    
     return {
       level,
-      weaponLevel: weaponUpgrade,
       meteorSpawnRate: Math.max(800, 2000 - level * 200), // Faster spawning: 2s -> 0.8s
       meteorSpeed: 1 + level * 0.3, // Faster meteors: 1 -> 4+ speed
       meteorSize: Math.max(30, 50 - level * 2), // Smaller meteors: 50px -> 30px
-      bulletRate: Math.max(100, 200 - weaponUpgrade * 15), // Faster bullets with weapon level
-      powerUpSpawnRate: Math.max(5000, 10000 - level * 500), // Power-ups spawn more often
+      bulletRate: Math.max(150, 200 - level * 10), // Faster bullets: 200ms -> 150ms
     };
   };
 
@@ -88,7 +72,7 @@ const Game: React.FC = () => {
   // Keyboard controls for pause
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
+      if (e.key === " " || e.key === "Escape") {
         e.preventDefault();
         if (gameStarted && !gameOver) {
           setGamePaused((prev) => !prev);
@@ -141,30 +125,20 @@ const Game: React.FC = () => {
 
       const difficultySettings = getDifficulty();
       setDifficulty(difficultySettings.level);
-      setWeaponLevel(difficultySettings.weaponLevel);
 
-      // Spawn bullets (double shot if upgraded)
+      // Spawn bullets
       if (
         currentTime - lastBulletTime.current >
         difficultySettings.bulletRate
       ) {
-        const bulletX = playerPos.x + PLAYER_SIZE / 2;
-        const bulletY = playerPos.y;
-        
-        if (doubleShot || difficultySettings.weaponLevel >= 3) {
-          // Double shot
-          setBullets((prev) => [
-            ...prev,
-            { id: currentTime, x: bulletX - 8, y: bulletY },
-            { id: currentTime + 0.1, x: bulletX + 8, y: bulletY },
-          ]);
-        } else {
-          // Single shot
-          setBullets((prev) => [
-            ...prev,
-            { id: currentTime, x: bulletX, y: bulletY },
-          ]);
-        }
+        setBullets((prev) => [
+          ...prev,
+          {
+            id: currentTime,
+            x: playerPos.x + PLAYER_SIZE / 2,
+            y: playerPos.y,
+          },
+        ]);
         lastBulletTime.current = currentTime;
       }
 
@@ -186,24 +160,6 @@ const Game: React.FC = () => {
         lastMeteorTime.current = currentTime;
       }
 
-      // Spawn power-ups occasionally
-      if (
-        currentTime - lastPowerUpTime.current >
-        difficultySettings.powerUpSpawnRate
-      ) {
-        const powerUpTypes: ('doubleShot' | 'rapidFire')[] = ['doubleShot', 'rapidFire'];
-        setPowerUps((prev) => [
-          ...prev,
-          {
-            id: currentTime,
-            x: Math.random() * (GAME_WIDTH - 40),
-            y: -40,
-            type: powerUpTypes[Math.floor(Math.random() * powerUpTypes.length)],
-          },
-        ]);
-        lastPowerUpTime.current = currentTime;
-      }
-
       // Update bullets
       setBullets((prev) =>
         prev
@@ -216,13 +172,6 @@ const Game: React.FC = () => {
         prev
           .map((meteor) => ({ ...meteor, y: meteor.y + meteor.speed }))
           .filter((meteor) => meteor.y < GAME_HEIGHT + 100)
-      );
-
-      // Update power-ups
-      setPowerUps((prev) =>
-        prev
-          .map((powerUp) => ({ ...powerUp, y: powerUp.y + 2 }))
-          .filter((powerUp) => powerUp.y < GAME_HEIGHT + 100)
       );
 
       animationFrameRef.current = requestAnimationFrame(gameLoop);
@@ -274,30 +223,7 @@ const Game: React.FC = () => {
       return newBullets;
     });
 
-    // Player-PowerUp collisions
-    powerUps.forEach((powerUp, index) => {
-      if (
-        playerPos.x < powerUp.x + 30 &&
-        playerPos.x + PLAYER_SIZE > powerUp.x &&
-        playerPos.y < powerUp.y + 30 &&
-        playerPos.y + PLAYER_SIZE > powerUp.y
-      ) {
-        // Collect power-up
-        setPowerUps((prev) => prev.filter((_, i) => i !== index));
-        
-        if (powerUp.type === 'doubleShot') {
-          setDoubleShot(true);
-          setTimeout(() => setDoubleShot(false), 10000); // 10 seconds
-        } else if (powerUp.type === 'rapidFire') {
-          setRapidFire(true);
-          setTimeout(() => setRapidFire(false), 8000); // 8 seconds
-        }
-        
-        setScore((prev) => prev + 25); // Bonus for collecting power-up
-      }
-    });
-
-    // Player-Meteor collisions (GAME OVER)
+    // Player-Meteor collisions
     meteors.forEach((meteor) => {
       if (
         playerPos.x < meteor.x + meteor.size &&
@@ -308,7 +234,7 @@ const Game: React.FC = () => {
         setGameOver(true);
       }
     });
-  }, [bullets, meteors, powerUps, playerPos, gamePaused]);
+  }, [bullets, meteors, playerPos, gamePaused]);
 
   const startGame = () => {
     setGameStarted(true);
@@ -316,16 +242,11 @@ const Game: React.FC = () => {
     setGamePaused(false);
     setScore(0);
     setDifficulty(1);
-    setWeaponLevel(1);
-    setDoubleShot(false);
-    setRapidFire(false);
     setPlayerPos({ x: GAME_WIDTH / 2 - PLAYER_SIZE / 2, y: GAME_HEIGHT - 100 });
     setMeteors([]);
     setBullets([]);
-    setPowerUps([]);
     lastBulletTime.current = 0;
     lastMeteorTime.current = 0;
-    lastPowerUpTime.current = 0;
   };
 
   const resetGame = () => {
@@ -334,13 +255,9 @@ const Game: React.FC = () => {
     setGamePaused(false);
     setScore(0);
     setDifficulty(1);
-    setWeaponLevel(1);
-    setDoubleShot(false);
-    setRapidFire(false);
     setPlayerPos({ x: GAME_WIDTH / 2 - PLAYER_SIZE / 2, y: GAME_HEIGHT - 100 });
     setMeteors([]);
     setBullets([]);
-    setPowerUps([]);
     if (animationFrameRef.current) {
       cancelAnimationFrame(animationFrameRef.current);
     }
@@ -374,7 +291,7 @@ const Game: React.FC = () => {
                 </p>
                 <p>🔹 Mouse: Move spaceship</p>
                 <p>🔹 Auto-fire: Destroys meteors</p>
-                <p>🔹 ESC: Pause/Resume game</p>
+                <p>🔹 Space/ESC: Pause game</p>
                 <p>🔹 Survive as long as possible!</p>
                 <p>
                   🔹 <strong>Difficulty increases every 100 points!</strong>
@@ -396,16 +313,13 @@ const Game: React.FC = () => {
               <div className="game__hud">
                 <div className="game__score">Score: {score}</div>
                 <div className="game__difficulty">Level: {difficulty}</div>
-                <div className="game__weapon">Weapon: {weaponLevel}</div>
                 <div className="game__high-score">Best: {highScore}</div>
-                {doubleShot && <div className="game__powerup">🔥 Double Shot</div>}
-                {rapidFire && <div className="game__powerup">⚡ Rapid Fire</div>}
               </div>
 
               {gamePaused && (
                 <div className="game__pause-overlay">
                   <h3>⏸️ GAME PAUSED</h3>
-                  <p>Press ESC to continue</p>
+                  <p>Press SPACE or ESC to continue</p>
                   <button onClick={togglePause} className="game__resume-btn">
                     Resume ▶️
                   </button>
@@ -455,23 +369,13 @@ const Game: React.FC = () => {
                 </div>
               ))}
 
-              {/* Power-ups */}
-              {powerUps.map((powerUp) => (
-                <div
-                  key={powerUp.id}
-                  className="game__powerup-item"
-                  style={{
-                    left: `${powerUp.x}px`,
-                    top: `${powerUp.y}px`,
-                  }}
-                >
-                  {powerUp.type === 'doubleShot' ? '🔥' : '⚡'}
-                </div>
-              ))}
-
               <div className="game__controls-hint">
-                Move mouse to navigate | Weapon Lv.{weaponLevel} | Collect power-ups | ESC: Pause
+                Move mouse to navigate | Auto-fire active | Space: Pause
               </div>
+
+              <button onClick={togglePause} className="game__pause-btn">
+                {gamePaused ? "▶️" : "⏸️"}
+              </button>
             </div>
           )}
 
@@ -524,20 +428,22 @@ const Game: React.FC = () => {
             </div>
           </div>
           <div className="stat-card">
-            <div className="stat-icon">�</div>
+            <div className="stat-icon">📈</div>
             <div className="stat-info">
-              <div className="stat-number">{weaponLevel}</div>
-              <div className="stat-label">Weapon Level</div>
+              <div className="stat-number">{difficulty}</div>
+              <div className="stat-label">Difficulty Level</div>
             </div>
           </div>
         </div>
 
         <div className="game__footer">
           <p>
-            🌟 <strong>Meteor Storm</strong> - Survive meteors, collect power-ups, upgrade weapons!
+            🌟 <strong>Meteor Storm</strong> - Survive the cosmic chaos, earn
+            rewards!
           </p>
           <p>
-            Mouse controls + Auto-fire | Pause: ESC | Weapons upgrade every 2 levels | Collect 🔥⚡ power-ups
+            Mouse controls + Auto-fire | Pause: Space/ESC | Difficulty increases
+            every 100 points
           </p>
         </div>
       </div>
