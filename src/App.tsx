@@ -12,6 +12,8 @@ import "./App.scss";
 function App() {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
+  const [fadeIn, setFadeIn] = useState(false);
+  const [loadingFadeOut, setLoadingFadeOut] = useState(false);
 
   useEffect(() => {
     // Simulate actual loading tasks
@@ -28,7 +30,13 @@ function App() {
     const processTask = () => {
       if (taskIndex >= loadingTasks.length) {
         setProgress(100);
-        setTimeout(() => setLoading(false), 800);
+        setTimeout(() => {
+          setLoadingFadeOut(true); // Start loading fade out
+          setTimeout(() => {
+            setLoading(false);
+            setTimeout(() => setFadeIn(true), 200); // Start main app fade in
+          }, 600); // Wait for fade out to complete
+        }, 500);
         return;
       }
 
@@ -50,11 +58,15 @@ function App() {
   }, []);
 
   if (loading) {
-    return <Loading progress={progress} />;
+    return (
+      <div className={`loading-wrapper ${loadingFadeOut ? 'loading-wrapper--fade-out' : ''}`}>
+        <Loading progress={progress} />
+      </div>
+    );
   }
 
   return (
-    <div className="app">
+    <div className={`app ${fadeIn ? 'app--fade-in' : ''}`}>
       <Navbar />
       <main className="main-content">
         <Hero />
