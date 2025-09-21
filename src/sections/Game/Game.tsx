@@ -24,7 +24,7 @@ interface PowerUp {
   id: number;
   x: number;
   y: number;
-  type: "doubleShot" | "rapidFire";
+  type: "doubleShot" | "rapidFire" | "crossFire";
 }
 
 const Game: React.FC = () => {
@@ -41,6 +41,7 @@ const Game: React.FC = () => {
   const [weaponLevel, setWeaponLevel] = useState(1);
   const [doubleShot, setDoubleShot] = useState(false);
   const [rapidFire, setRapidFire] = useState(false);
+  const [crossFire, setCrossFire] = useState(false);
 
   const gameAreaRef = useRef<HTMLDivElement>(null);
   const animationFrameRef = useRef<number>(0);
@@ -65,7 +66,7 @@ const Game: React.FC = () => {
       meteorSpeed: 1 + level * 0.3, // Faster meteors: 1 -> 4+ speed
       meteorSize: Math.max(30, 50 - level * 2), // Smaller meteors: 50px -> 30px
       bulletRate: Math.max(100, 200 - weaponUpgrade * 15), // Faster bullets with weapon level
-      powerUpSpawnRate: Math.max(5000, 10000 - level * 500), // Power-ups spawn more often
+      powerUpSpawnRate: Math.max(12000, 20000 - level * 1000), // Power-ups spawn less frequently: 20s -> 12s
     };
   };
 
@@ -148,15 +149,23 @@ const Game: React.FC = () => {
       setDifficulty(difficultySettings.level);
       setWeaponLevel(difficultySettings.weaponLevel);
 
-      // Spawn bullets (double shot if upgraded)
+      // Spawn bullets (enhanced with power-ups)
       if (
         currentTime - lastBulletTime.current >
-        difficultySettings.bulletRate
+        (rapidFire ? difficultySettings.bulletRate * 0.5 : difficultySettings.bulletRate)
       ) {
         const bulletX = playerPos.x + PLAYER_SIZE / 2;
         const bulletY = playerPos.y;
 
-        if (doubleShot || difficultySettings.weaponLevel >= 3) {
+        if (crossFire) {
+          // Cross fire: 3 bullets (center, left diagonal, right diagonal)
+          setBullets((prev) => [
+            ...prev,
+            { id: currentTime, x: bulletX, y: bulletY }, // Center
+            { id: currentTime + 0.1, x: bulletX - 15, y: bulletY }, // Left
+            { id: currentTime + 0.2, x: bulletX + 15, y: bulletY }, // Right
+          ]);
+        } else if (doubleShot || difficultySettings.weaponLevel >= 3) {
           // Double shot
           setBullets((prev) => [
             ...prev,
@@ -191,24 +200,28 @@ const Game: React.FC = () => {
         lastMeteorTime.current = currentTime;
       }
 
-      // Spawn power-ups occasionally
+      // Spawn power-ups occasionally and randomly
       if (
         currentTime - lastPowerUpTime.current >
         difficultySettings.powerUpSpawnRate
       ) {
-        const powerUpTypes: ("doubleShot" | "rapidFire")[] = [
-          "doubleShot",
-          "rapidFire",
-        ];
-        setPowerUps((prev) => [
-          ...prev,
-          {
-            id: currentTime,
-            x: Math.random() * (GAME_WIDTH - 40),
-            y: -40,
-            type: powerUpTypes[Math.floor(Math.random() * powerUpTypes.length)],
-          },
-        ]);
+        // Only 30% chance to spawn a power-up (more rare)
+        if (Math.random() < 0.3) {
+          const powerUpTypes: ("doubleShot" | "rapidFire" | "crossFire")[] = [
+            "doubleShot",
+            "rapidFire",
+            "crossFire",
+          ];
+          setPowerUps((prev) => [
+            ...prev,
+            {
+              id: currentTime,
+              x: Math.random() * (GAME_WIDTH - 40),
+              y: -40,
+              type: powerUpTypes[Math.floor(Math.random() * powerUpTypes.length)],
+            },
+          ]);
+        }
         lastPowerUpTime.current = currentTime;
       }
 
@@ -219,12 +232,25 @@ const Game: React.FC = () => {
           .filter((bullet) => bullet.y > -10)
       );
 
-      // Update meteors
-      setMeteors((prev) =>
-        prev
+      // Update meteors - Game over if meteor hits ground
+      setMeteors((prev) => {
+        const updatedMeteors = prev
           .map((meteor) => ({ ...meteor, y: meteor.y + meteor.speed }))
-          .filter((meteor) => meteor.y < GAME_HEIGHT + 100)
-      );
+          .filter((meteor) => {
+            // If meteor reaches bottom of screen, game over
+            if (meteor.y >= GAME_HEIGHT - 50) {
+              console.log("Meteor hit ground! Game Over!");
+              setGameOver(true);
+              if (animationFrameRef.current) {
+                cancelAnimationFrame(animationFrameRef.current);
+              }
+              return false; // Remove this meteor
+            }
+            return meteor.y < GAME_HEIGHT + 100;
+          });
+
+        return updatedMeteors;
+      });
 
       // Update power-ups
       setPowerUps((prev) =>
@@ -295,10 +321,13 @@ const Game: React.FC = () => {
 
         if (powerUp.type === "doubleShot") {
           setDoubleShot(true);
-          setTimeout(() => setDoubleShot(false), 10000); // 10 seconds
+          setTimeout(() => setDoubleShot(false), 12000); // 12 seconds
         } else if (powerUp.type === "rapidFire") {
           setRapidFire(true);
-          setTimeout(() => setRapidFire(false), 8000); // 8 seconds
+          setTimeout(() => setRapidFire(false), 10000); // 10 seconds
+        } else if (powerUp.type === "crossFire") {
+          setCrossFire(true);
+          setTimeout(() => setCrossFire(false), 15000); // 15 seconds
         }
 
         setScore((prev) => prev + 25); // Bonus for collecting power-up
@@ -320,7 +349,15 @@ const Game: React.FC = () => {
         }
       }
     });
-  }, [bullets, meteors, powerUps, playerPos, gamePaused, gameOver, gameStarted]);
+  }, [
+    bullets,
+    meteors,
+    powerUps,
+    playerPos,
+    gamePaused,
+    gameOver,
+    gameStarted,
+  ]);
 
   const startGame = () => {
     setGameStarted(true);
@@ -331,6 +368,7 @@ const Game: React.FC = () => {
     setWeaponLevel(1);
     setDoubleShot(false);
     setRapidFire(false);
+    setCrossFire(false);
     setPlayerPos({ x: GAME_WIDTH / 2 - PLAYER_SIZE / 2, y: GAME_HEIGHT - 100 });
     setMeteors([]);
     setBullets([]);
@@ -349,6 +387,7 @@ const Game: React.FC = () => {
     setWeaponLevel(1);
     setDoubleShot(false);
     setRapidFire(false);
+    setCrossFire(false);
     setPlayerPos({ x: GAME_WIDTH / 2 - PLAYER_SIZE / 2, y: GAME_HEIGHT - 100 });
     setMeteors([]);
     setBullets([]);
@@ -416,6 +455,9 @@ const Game: React.FC = () => {
                 {rapidFire && (
                   <div className="game__powerup">⚡ Rapid Fire</div>
                 )}
+                {crossFire && (
+                  <div className="game__powerup">💥 Cross Fire</div>
+                )}
               </div>
 
               {gamePaused && (
@@ -481,7 +523,9 @@ const Game: React.FC = () => {
                     top: `${powerUp.y}px`,
                   }}
                 >
-                  {powerUp.type === "doubleShot" ? "🔥" : "⚡"}
+                  {powerUp.type === "doubleShot" && "🔥"}
+                  {powerUp.type === "rapidFire" && "⚡"}
+                  {powerUp.type === "crossFire" && "💥"}
                 </div>
               ))}
 
@@ -556,7 +600,7 @@ const Game: React.FC = () => {
           </p>
           <p>
             Mouse controls + Auto-fire | Pause: ESC | Weapons upgrade every 2
-            levels | Collect 🔥⚡ power-ups
+            levels | Collect 🔥⚡💥 power-ups (rare drops!)
           </p>
         </div>
       </div>
