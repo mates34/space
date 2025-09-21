@@ -152,7 +152,9 @@ const Game: React.FC = () => {
       // Spawn bullets (enhanced with power-ups)
       if (
         currentTime - lastBulletTime.current >
-        (rapidFire ? difficultySettings.bulletRate * 0.5 : difficultySettings.bulletRate)
+        (rapidFire
+          ? difficultySettings.bulletRate * 0.5
+          : difficultySettings.bulletRate)
       ) {
         const bulletX = playerPos.x + PLAYER_SIZE / 2;
         const bulletY = playerPos.y;
@@ -218,7 +220,9 @@ const Game: React.FC = () => {
               id: currentTime,
               x: Math.random() * (GAME_WIDTH - 40),
               y: -40,
-              type: powerUpTypes[Math.floor(Math.random() * powerUpTypes.length)],
+              type: powerUpTypes[
+                Math.floor(Math.random() * powerUpTypes.length)
+              ],
             },
           ]);
         }
