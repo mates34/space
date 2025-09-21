@@ -59,14 +59,18 @@ function App() {
 
   if (loading) {
     return (
-      <div className={`loading-wrapper ${loadingFadeOut ? 'loading-wrapper--fade-out' : ''}`}>
+      <div
+        className={`loading-wrapper ${
+          loadingFadeOut ? "loading-wrapper--fade-out" : ""
+        }`}
+      >
         <Loading progress={progress} />
       </div>
     );
   }
 
   return (
-    <div className={`app ${fadeIn ? 'app--fade-in' : ''}`}>
+    <div className={`app ${fadeIn ? "app--fade-in" : ""}`}>
       <Navbar />
       <main className="main-content">
         <Hero />

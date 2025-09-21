@@ -12,7 +12,7 @@ const Loading: React.FC<LoadingProps> = ({ progress = 0 }) => {
   useEffect(() => {
     // Smooth progress animation
     const animate = () => {
-      setDisplayProgress(prev => {
+      setDisplayProgress((prev) => {
         const diff = progress - prev;
         return prev + diff * 0.1;
       });
@@ -46,10 +46,10 @@ const Loading: React.FC<LoadingProps> = ({ progress = 0 }) => {
           <div className="loading__logo-icon">🚀</div>
           <h1 className="loading__logo-text">Space AI</h1>
         </div>
-        
+
         <div className="loading__progress">
           <div className="loading__progress-bar">
-            <div 
+            <div
               className="loading__progress-fill"
               style={{ width: `${Math.min(100, displayProgress)}%` }}
             ></div>
@@ -58,11 +58,9 @@ const Loading: React.FC<LoadingProps> = ({ progress = 0 }) => {
             {Math.round(Math.min(100, displayProgress))}%
           </div>
         </div>
-        
-        <div className="loading__text">
-          {loadingText}
-        </div>
-        
+
+        <div className="loading__text">{loadingText}</div>
+
         <div className="loading__stars">
           <div className="star"></div>
           <div className="star"></div>
