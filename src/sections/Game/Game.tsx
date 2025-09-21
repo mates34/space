@@ -24,7 +24,7 @@ interface PowerUp {
   id: number;
   x: number;
   y: number;
-  type: 'doubleShot' | 'rapidFire';
+  type: "doubleShot" | "rapidFire";
 }
 
 const Game: React.FC = () => {
@@ -57,7 +57,7 @@ const Game: React.FC = () => {
   const getDifficulty = () => {
     const level = Math.floor(score / 100) + 1; // Every 100 points = +1 level
     const weaponUpgrade = Math.floor(level / 2) + 1; // Weapon upgrades every 2 levels
-    
+
     return {
       level,
       weaponLevel: weaponUpgrade,
@@ -137,7 +137,12 @@ const Game: React.FC = () => {
   // Game loop with requestAnimationFrame
   const gameLoop = useCallback(
     (currentTime: number) => {
-      if (!gameStarted || gameOver || gamePaused) return;
+      if (!gameStarted || gameOver || gamePaused) {
+        if (animationFrameRef.current) {
+          cancelAnimationFrame(animationFrameRef.current);
+        }
+        return;
+      }
 
       const difficultySettings = getDifficulty();
       setDifficulty(difficultySettings.level);
@@ -150,7 +155,7 @@ const Game: React.FC = () => {
       ) {
         const bulletX = playerPos.x + PLAYER_SIZE / 2;
         const bulletY = playerPos.y;
-        
+
         if (doubleShot || difficultySettings.weaponLevel >= 3) {
           // Double shot
           setBullets((prev) => [
@@ -191,7 +196,10 @@ const Game: React.FC = () => {
         currentTime - lastPowerUpTime.current >
         difficultySettings.powerUpSpawnRate
       ) {
-        const powerUpTypes: ('doubleShot' | 'rapidFire')[] = ['doubleShot', 'rapidFire'];
+        const powerUpTypes: ("doubleShot" | "rapidFire")[] = [
+          "doubleShot",
+          "rapidFire",
+        ];
         setPowerUps((prev) => [
           ...prev,
           {
@@ -244,7 +252,7 @@ const Game: React.FC = () => {
 
   // Collision detection
   useEffect(() => {
-    if (gamePaused) return;
+    if (gamePaused || gameOver || !gameStarted) return;
 
     // Bullet-Meteor collisions
     setBullets((prevBullets) => {
@@ -284,15 +292,15 @@ const Game: React.FC = () => {
       ) {
         // Collect power-up
         setPowerUps((prev) => prev.filter((_, i) => i !== index));
-        
-        if (powerUp.type === 'doubleShot') {
+
+        if (powerUp.type === "doubleShot") {
           setDoubleShot(true);
           setTimeout(() => setDoubleShot(false), 10000); // 10 seconds
-        } else if (powerUp.type === 'rapidFire') {
+        } else if (powerUp.type === "rapidFire") {
           setRapidFire(true);
           setTimeout(() => setRapidFire(false), 8000); // 8 seconds
         }
-        
+
         setScore((prev) => prev + 25); // Bonus for collecting power-up
       }
     });
@@ -300,15 +308,19 @@ const Game: React.FC = () => {
     // Player-Meteor collisions (GAME OVER)
     meteors.forEach((meteor) => {
       if (
-        playerPos.x < meteor.x + meteor.size &&
-        playerPos.x + PLAYER_SIZE > meteor.x &&
-        playerPos.y < meteor.y + meteor.size &&
-        playerPos.y + PLAYER_SIZE > meteor.y
+        playerPos.x < meteor.x + meteor.size - 10 &&
+        playerPos.x + PLAYER_SIZE > meteor.x + 10 &&
+        playerPos.y < meteor.y + meteor.size - 10 &&
+        playerPos.y + PLAYER_SIZE > meteor.y + 10
       ) {
+        console.log("COLLISION DETECTED! Game Over!");
         setGameOver(true);
+        if (animationFrameRef.current) {
+          cancelAnimationFrame(animationFrameRef.current);
+        }
       }
     });
-  }, [bullets, meteors, powerUps, playerPos, gamePaused]);
+  }, [bullets, meteors, powerUps, playerPos, gamePaused, gameOver, gameStarted]);
 
   const startGame = () => {
     setGameStarted(true);
@@ -398,8 +410,12 @@ const Game: React.FC = () => {
                 <div className="game__difficulty">Level: {difficulty}</div>
                 <div className="game__weapon">Weapon: {weaponLevel}</div>
                 <div className="game__high-score">Best: {highScore}</div>
-                {doubleShot && <div className="game__powerup">🔥 Double Shot</div>}
-                {rapidFire && <div className="game__powerup">⚡ Rapid Fire</div>}
+                {doubleShot && (
+                  <div className="game__powerup">🔥 Double Shot</div>
+                )}
+                {rapidFire && (
+                  <div className="game__powerup">⚡ Rapid Fire</div>
+                )}
               </div>
 
               {gamePaused && (
@@ -465,12 +481,13 @@ const Game: React.FC = () => {
                     top: `${powerUp.y}px`,
                   }}
                 >
-                  {powerUp.type === 'doubleShot' ? '🔥' : '⚡'}
+                  {powerUp.type === "doubleShot" ? "🔥" : "⚡"}
                 </div>
               ))}
 
               <div className="game__controls-hint">
-                Move mouse to navigate | Weapon Lv.{weaponLevel} | Collect power-ups | ESC: Pause
+                Move mouse to navigate | Weapon Lv.{weaponLevel} | Collect
+                power-ups | ESC: Pause
               </div>
             </div>
           )}
@@ -534,10 +551,12 @@ const Game: React.FC = () => {
 
         <div className="game__footer">
           <p>
-            🌟 <strong>Meteor Storm</strong> - Survive meteors, collect power-ups, upgrade weapons!
+            🌟 <strong>Meteor Storm</strong> - Survive meteors, collect
+            power-ups, upgrade weapons!
           </p>
           <p>
-            Mouse controls + Auto-fire | Pause: ESC | Weapons upgrade every 2 levels | Collect 🔥⚡ power-ups
+            Mouse controls + Auto-fire | Pause: ESC | Weapons upgrade every 2
+            levels | Collect 🔥⚡ power-ups
           </p>
         </div>
       </div>
