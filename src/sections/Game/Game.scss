@@ -225,28 +225,6 @@
     }
   }
 
-  &__pause-btn {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: rgba(0, 0, 0, 0.8);
-    border: 1px solid rgba(255, 107, 0, 0.3);
-    color: #ff6b00;
-    padding: 0.5rem;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    z-index: 12;
-
-    &:hover {
-      background: rgba(255, 107, 0, 0.2);
-      transform: scale(1.1);
-    }
-  }
-
   &__player {
     position: absolute;
     font-size: 2rem;

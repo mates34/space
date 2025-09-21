@@ -72,7 +72,7 @@ const Game: React.FC = () => {
   // Keyboard controls for pause
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === " " || e.key === "Escape") {
+      if (e.key === "Escape") {
         e.preventDefault();
         if (gameStarted && !gameOver) {
           setGamePaused(prev => !prev);
@@ -263,7 +263,7 @@ const Game: React.FC = () => {
                 </p>
                 <p>🔹 Mouse: Move spaceship</p>
                 <p>🔹 Auto-fire: Destroys meteors</p>
-                <p>🔹 Space/ESC: Pause game</p>
+                <p>🔹 ESC: Pause/Resume game</p>
                 <p>🔹 Survive as long as possible!</p>
                 <p>🔹 <strong>Difficulty increases every 100 points!</strong></p>
               </div>
@@ -289,7 +289,7 @@ const Game: React.FC = () => {
               {gamePaused && (
                 <div className="game__pause-overlay">
                   <h3>⏸️ GAME PAUSED</h3>
-                  <p>Press SPACE or ESC to continue</p>
+                  <p>Press ESC to continue</p>
                   <button onClick={togglePause} className="game__resume-btn">
                     Resume ▶️
                   </button>
@@ -340,12 +340,8 @@ const Game: React.FC = () => {
               ))}
 
               <div className="game__controls-hint">
-                Move mouse to navigate | Auto-fire active | Space: Pause
+                Move mouse to navigate | Auto-fire active | ESC: Pause
               </div>
-
-              <button onClick={togglePause} className="game__pause-btn">
-                {gamePaused ? "▶️" : "⏸️"}
-              </button>
             </div>
           )}
 
@@ -406,7 +402,7 @@ const Game: React.FC = () => {
           <p>
             🌟 <strong>Meteor Storm</strong> - Survive the cosmic chaos, earn rewards!
           </p>
-          <p>Mouse controls + Auto-fire | Pause: Space/ESC | Difficulty increases every 100 points</p>
+          <p>Mouse controls + Auto-fire | Pause: ESC | Difficulty increases every 100 points</p>
         </div>
       </div>
     </section>
