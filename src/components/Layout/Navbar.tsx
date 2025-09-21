@@ -98,6 +98,14 @@ const Navbar: React.FC = () => {
           >
             Chains
           </button>
+          <button
+            onClick={() => scrollToSection("game")}
+            className={`navbar__link ${
+              activeSection === "game" ? "active" : ""
+            }`}
+          >
+            Game
+          </button>
         </div>
 
         <div className="navbar__actions">

@@ -9,6 +9,7 @@ import "./sections/Hero/Hero.scss";
 import "./sections/About/About.scss";
 import "./sections/Features/Features.scss";
 import "./sections/Chains/Chains.scss";
+import "./sections/Game/Game.scss";
 import "./components/Layout/Navbar.scss";
 import "./components/SaturnPlanet/SaturnPlanet.scss";
 import "./components/MoonMapModal/MoonMapModal.scss";
